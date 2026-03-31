@@ -1,0 +1,198 @@
+import os
+import re
+import gc
+import numpy as np
+import matplotlib.pyplot as plt
+import copy
+from argparse import ArgumentParser
+from itertools import product
+
+from Models.Caller64 import *
+from Utilities.EvaluationMain import *
+from Utilities.Utilities import ReadYaml, SerializeObjects, DeserializeObjects, LoadModelConfigs, LoadParams
+
+
+# Refer to the execution code
+#python .\BatchMIEvaluation.py --Config EvalConfigMimic --ConfigSpec FC_II_1_50_800_Mimic --GPUID 0
+
+
+
+#### -----------------------------------------------------   Defining model structure -----------------------------------------------------------------    
+def SetModel():
+    # Calling Modesl
+    SigRepModel, ModelParts = ModelCall (ModelConfigSet, SigDim, DataSize, LoadWeight=True, ReturnModelPart=True, ReparaStd=Params['ReparaStd'], ModelSaveName=ModelLoadName)
+
+
+    # Setting Model Specifications and Sub-models
+    if Params['LossType'] =='Default':
+        EncModel, FeatExtModel, FeatGenModel, ReconModel = ModelParts
+    elif Params['LossType'] =='FACLosses':
+        EncModel, FeatExtModel, FeatGenModel, ReconModel, FacDiscModel = ModelParts
+
+    ## The generation model for evaluation
+    RecOut = ReconModel(FeatGenModel.output)
+    GenModel = Model(FeatGenModel.input, RecOut)
+
+    ## The sampling model for evaluation
+    Zs_Out = SigRepModel.get_layer('Zs').output
+    SampZModel = Model(EncModel.input, Zs_Out)
+    SampFCModel = Model(EncModel.input, SigRepModel.get_layer('FCs').output) 
+    return SampZModel, SampFCModel, GenModel          
+
+
+if __name__ == "__main__":
+
+    
+    # Create the parser
+    parser = ArgumentParser()
+    
+    # Add Experiment-related parameters
+    parser.add_argument('--Config', type=str, required=True, help='Set the name of the configuration to load (the name of the YAML file).')
+    parser.add_argument('--ConfigSpec', nargs='+', type=str, required=False, 
+                        default=None, help='Set the name of the specific configuration to load (the name of the model config in the YAML file).')
+    parser.add_argument('--GPUID', type=int, required=False, default=1)
+    
+    args = parser.parse_args() # Parse the arguments
+    ConfigName = args.Config
+    ConfigSpecName = args.ConfigSpec
+    GPU_ID = args.GPUID
+    
+    YamlPath = './Config/'+ConfigName+'.yml'
+    EvalConfigs = ReadYaml(YamlPath)
+
+    ## GPU selection and configuration
+    os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
+    os.environ["CUDA_VISIBLE_DEVICES"] = str(GPU_ID)
+    
+    # TensorFlow GPU memory configuration
+    gpus = tf.config.experimental.list_physical_devices('GPU')
+    if gpus:
+        try:
+            # Since CUDA_VISIBLE_DEVICES is set, the first GPU (index 0) corresponds to the selected GPU_ID
+            gpu = gpus[0]
+            
+            # Enable memory growth to avoid allocating all GPU memory at once
+            tf.config.experimental.set_memory_growth(gpu, True)
+            
+            # Set virtual device memory limit (convert to integer to avoid type error)
+            memory_limit_mb = int(1024 * 23.5)  # 24064 MB
+            tf.config.experimental.set_virtual_device_configuration(
+                gpu, 
+                [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=memory_limit_mb)]
+            )
+            
+            print(f"GPU {GPU_ID} configured successfully with memory limit: {memory_limit_mb} MB")
+            
+        except RuntimeError as e:
+            print(f"GPU configuration failed: {e}")
+            print("Falling back to default GPU settings")
+            
+        except Exception as e:
+            print(f"Unexpected error during GPU configuration: {e}")
+            
+    else:
+        print("No GPU devices found. Running on CPU.")
+        
+    # Optional: Verify GPU configuration
+    print(f"Available GPUs: {len(tf.config.experimental.list_physical_devices('GPU'))}")
+    print(f"Available CPUs: {len(tf.config.experimental.list_physical_devices('CPU'))}")
+            
+    # Checking whether the path to save the object exists or not.
+    if not os.path.exists('./EvalResults/Instances/') :
+        os.makedirs('./EvalResults/Instances/')
+                 
+    # Checking whether the path to save the SampZj exists or not.
+    if not os.path.exists('./Data/IntermediateData/') :
+        os.makedirs('./Data/IntermediateData/')
+
+       
+             
+                 
+    #### -----------------------------------------------------  Conducting batch evaluation --------------------------------------------------------------
+                 
+    SigTypePrev = None
+    for ConfigName in EvalConfigs['ModelList']:
+        
+        if ConfigName == 'Common_Info':
+            continue
+        
+        if ConfigSpecName is not None: 
+            if ConfigName not in ConfigSpecName:
+                continue
+                
+        print()
+        print('Test ConfigName: ', ConfigName)
+                
+        #### -----------------------------------------------------  Setting evaluation environment ----------------------------------------------------------
+        # Loading the model configurations
+        ModelConfigSet, ModelLoadName = LoadModelConfigs(ConfigName)
+        
+        # Loading parameters for the evaluation
+        Params = LoadParams(ModelConfigSet, EvalConfigs['Parameters'])
+        Params['Common_Info'] = EvalConfigs['Common_Info']
+
+
+        #### -----------------------------------------------------   Loading data -------------------------------------------------------------------------   
+        if SigTypePrev != Params['SigType']:
+            SigTypePrev = Params['SigType'] # To change data type: ART, II, PLETH
+
+            print('SigType:', Params['SigType'])
+            
+            # Loading data
+            AnalData = np.load('./Data/ProcessedData/'+str(Params['TestDataSource'])+'Test'+str(Params['SigType'])+'.npy').astype('float64')[:Params['EvalDataSize']]
+
+
+        # Intermediate parameters 
+        SigDim = AnalData.shape[1]
+        DataSize = AnalData.shape[0]
+
+        print('Test observation size : ', DataSize)
+        
+
+        #### -----------------------------------------------------  Conducting Evalution -----------------------------------------------------------------          
+        # Is the value assigned by ArgumentParser or assigned by YML?
+        NZs = Params['NSelZ']
+        FC = Params['FcLimit']
+        
+        print('NZs : ', NZs)
+        print('FC : ', FC)
+        print()
+        
+   
+        # Setting the model
+        SampZModel, SampFCModel, GenModel = SetModel()
+
+        
+        
+        # Object save path
+        ObjSavePath = './EvalResults/Instances/Obj_'+ConfigName+'_Nj'+str(NZs)+'_FC'+str(FC)+'.pkl'
+        SampZjSavePath = './Data/IntermediateData/'+ConfigName+'_Nj'+str(NZs)+'_FC'+str(FC)+'.pickle'
+    
+        # Instantiation 
+        Eval = Evaluator(MinFreq = Params['MinFreq'], MaxFreq = Params['MaxFreq'], SimSize = Params['SimSize'], NMiniBat = Params['NMiniBat'], NParts = Params['NParts'],
+               NSubGen = Params['NSubGen'], ReparaStdZj = Params['ReparaStdZj'], NSelZ = NZs, SampBatchSize = Params['SampBatchSize'], 
+               SelMetricType = Params['SelMetricType'], SelMetricCut = Params['SelMetricCut'], GenBatchSize = Params['GenBatchSize'], GPU = Params['GPU'], 
+               Name=ConfigName+'_Nj'+str(NZs)+'_FC'+str(FC), fft_methods=['fft', 'welch_evo', 'matching_pursuit'])
+
+        
+        ## Executing evaluation
+        Eval.Eval_ZFC(AnalData[:],  SampZModel, SampFCModel, GenModel, FcLimit=FC, WindowSize=Params['WindowSize'], Continue=False)
+
+
+        # Selecting post Samp_Zj for generating plausible signals
+        SelPostSamp = Eval.SelPostSamp( Params['SelMetricCut'], SavePath=SampZjSavePath)
+    
+    
+        # Evaluating KLD (P || K)
+        #Eval.KLD_TrueGen(SecDataType ='FCA', RepeatSize = 1, PlotDist=False) 
+
+        # Saving the instance's objects to a file
+        SerializeObjects(Eval, Params['Common_Info'], ObjSavePath)
+
+        # Clearing the current TensorFlow session and running garbage collection
+        # This helps to reduce unnecessary memory usage after each iteration
+        tf.keras.backend.clear_session()
+        
+        _ = gc.collect()
+            
+            
