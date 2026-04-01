@@ -121,9 +121,7 @@ A lightweight demo is available for quick testing of signal generation and visua
 
 This notebook covers loading the demo data, running the VABAM generation pipeline, and visualizing generated physiological signals and their spectral characteristics.
 
-> **Note:** Demo files contain names like `MIMIC` or `VitalDB` for pipeline compatibility only — they are **not** real records from those sources.
->
-> **Note:** The demo dataset is a small synthetic sample, so synthesis and visualization quality may be limited.
+> **Note:** Demo files contain names like `MIMIC` or `VitalDB` for pipeline compatibility only — they are **not** real records from those sources. The demo dataset is a small synthetic sample, so synthesis and visualization quality may be limited.
 >
 > **Note:** No training, evaluation, or benchmarking is required for this demo, and on a normal desktop computer it typically completes within about 2 minutes on CPU.
 
@@ -135,16 +133,25 @@ The original study used data from:
 - **MIMIC-III Waveform Database**: https://physionet.org/content/mimic3wdb/1.0/
 - **VitalDB**: https://vitaldb.net/
 
-Both datasets are subject to their respective Data Use Agreements. 
+> **Note:** MIMIC-III Waveform Database is openly available under the ODC Open Database License (ODbL) v1.0.
+> 
+> **Note:** VitalDB is subject to the provider's terms of use (registration agreement: https://vitaldb.net/registration-agreement/).
+
+### Processed MIMIC-III Dataset
+The processed MIMIC-III Waveform dataset used in this study is publicly archived on Zenodo:
+- **DOI**: https://doi.org/10.5281/zenodo.19354579
+
+> ⚠️ The dataset is currently under embargo and will be publicly available upon acceptance of the associated paper.
 
 ### Synthetic Dataset
-Original data are not redistributed in this repository; instead, synthetic data generated with NeuroKit2 are provided as a substitute.
-- `Data/Demo` — small sample for the demo above
-- A larger synthetic dataset can be generated locally by running the following notebooks **in order** from the `./Data` folder:
-  1. `Demodataset.ipynb` — generates synthetic signals (dataset size is configurable within this notebook)
-  2. `DemoProcessing_mu_law_encode_sampling.ipynb` — processes and encodes the signals for WaveNet-based benchmark models; **this step can be skipped if you are not running WaveNet-based benchmarks**
+For users without access to the original data, synthetic data generated with NeuroKit2 are provided as a substitute.
+- [`Data/Demo`](https://github.com/JunetaeKim/VABAM-official/tree/main/Data/Demo) — small sample for the demo above
+- A larger synthetic dataset can be generated locally by running the following notebooks **in order** from the [`./Data`](https://github.com/JunetaeKim/VABAM-official/tree/main/Data) folder:
+  1. [`Demodataset.ipynb`](https://github.com/JunetaeKim/VABAM-official/blob/main/Data/Demodataset.ipynb) — generates synthetic signals (dataset size is configurable within this notebook)
+  2. [`DemoProcessing_mu_law_encode_sampling.ipynb`](https://github.com/JunetaeKim/VABAM-official/blob/main/Data/DemoProcessing_mu_law_encode_sampling.ipynb) — processes and encodes the signals for WaveNet-based benchmark models; **this step can be skipped if you are not running WaveNet-based benchmarks**
 
-  Output files will be saved to `./Data/ProcessedData`.
+  Output files will be saved to [`./Data/ProcessedData`](https://github.com/JunetaeKim/VABAM-official/tree/main/Data/ProcessedData).
+
   Four reference files (`Mimic3SigMax`, `Mimic3SigMin`, `VitalDBSigMax`, `VitalDBSigMin`) are pre-provided in the repository — these contain **arbitrary placeholder values only and do not represent any real data**.
 
 </p><br>
