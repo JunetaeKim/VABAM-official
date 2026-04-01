@@ -8,8 +8,8 @@ This repository contains the official implementation of VABAM along with the Con
 
 - **Development of the VABAM Model:** A model capable of synthesizing pulsatile physiological signals through cascaded filtering effects, namely *amplitude-based* modulation, ensuring the preservation of the signals' waveform shape.
 <p align="center">
-  <img src="https://github.com/JunetaeKim/VABAM/blob/main/Figures/Anim.%201%20VABAM%20(Our%20Model)%20Synthesis%20Results.gif" width="49%" alt="Pass-filter mechanism">
-  <img src="https://github.com/JunetaeKim/VABAM/blob/main/Figures/Anim.%202%20C-VAE%20Synthesis%20Results.gif" width="49%" alt="Pass-filter mechanism">
+  <img src="https://github.com/JunetaeKim/VABAM-official/blob/main/Figures/Anim.%201%20VABAM%20(Our%20Model)%20Synthesis%20Results.gif" width="49%" alt="Pass-filter mechanism">
+  <img src="https://github.com/JunetaeKim/VABAM-official/blob/main/Figures/Anim.%202%20C-VAE%20Synthesis%20Results.gif" width="49%" alt="Pass-filter mechanism">
   <br>
   <em>Figure 1: Amplitude-Based Modulation of ABP via VABAM (left) vs CVAE (right) </em>  
 </p>
@@ -23,7 +23,7 @@ Figure 1 shows the results of synthesizing 100 signals from a single original Ar
 <br>
 
 <p align="center">
-  <img src="https://github.com/JunetaeKim/VABAM/blob/main/Figures/Schematic%20overview%20for%20assessing%20morphology%E2%80%93amplitude%20decoupling%20quality.png" width="75%" alt="Pass-filter mechanism">
+  <img src="https://github.com/JunetaeKim/VABAM-official/blob/main/Figures/Schematic%20overview%20for%20assessing%20morphology%E2%80%93amplitude%20decoupling%20quality.png" width="75%" alt="Pass-filter mechanism">
   <br>
   <em>Figure 2: Evaluation pipeline for waveform shape–amplitude decoupling </em>  
 </p>
@@ -48,7 +48,8 @@ Using these representations, three KLD-based metrics—shape factorization (SF),
 - **Signal Reconstructor** $g_y(\cdot)$ reconstructs coherent signals from the feature subsets, keeping the original signal's main aspects and adding latent elements influenced by $z_{j}$ and $\theta_{k}$.
 
 <p align="center">
-  <img src="https://github.com/JunetaeKim/VABAM/blob/main/Figures/Overview of the framework and key concepts.png" width="75%" alt="Intuitive Illustration of VABAM">
+  <img src="https://github.com/JunetaeKim/VABAM-official
+/blob/main/Figures/Overview of the framework and key concepts.png" width="75%" alt="Intuitive Illustration of VABAM">
   
   <br>
   <em> Figure 3: Overview of the framework and key concepts </em>  
@@ -71,15 +72,15 @@ VABAM's training and its post-evaluation were conducted and tested with the foll
 ### For Training
 To start the training process, use the following scripts:
 - `TrainModel.py` or `TrainModel64.py`: Scripts for training the main model (32-bit or 64-bit).
-- `TrainBenchmark.py` or `TrainBenchmark64.py`: Scripts for training the benchmark models (32-bit or 64-bit). Refer to the [Benchmarks](https://github.com/JunetaeKim/VABAM/tree/main/Benchmarks) folder for details.
+- `TrainBenchmark.py` or `TrainBenchmark64.py`: Scripts for training the benchmark models (32-bit or 64-bit). Refer to the [Benchmarks](https://github.com/JunetaeKim/VABAM-official/tree/main/Benchmarks) folder for details.
 
 
 ### For CMI-Based Metric Computation
 To compute the CMI-based metrics, follow these steps:
 - `BatchMIEvaluation.py` (with `BatchMIEvaluation.py`): Script for computing metrics.
-- `BatchBMMIEvaluation.py` (with `BatchBMMIEvaluation.py`): Script for computing benchmark model metrics. Refer to the [Benchmarks](https://github.com/JunetaeKim/VABAM/tree/main/Benchmarks) folder.
+- `BatchBMMIEvaluation.py` (with `BatchBMMIEvaluation.py`): Script for computing benchmark model metrics. Refer to the [Benchmarks](https://github.com/JunetaeKim/VABAM-official/tree/main/Benchmarks) folder.
 - `TabulatingResults.py`: Script for tabulating results from the main model evaluation.
-- `TabulatingBMResults.py`: Script for tabulating results from the benchmark model evaluation. Refer to the [Benchmarks](https://github.com/JunetaeKim/VABAM/tree/main/Benchmarks) folder.
+- `TabulatingBMResults.py`: Script for tabulating results from the benchmark model evaluation. Refer to the [Benchmarks](https://github.com/JunetaeKim/VABAM-official/tree/main/Benchmarks) folder.
 
 For visualization and table generation:
 - `VisualizationSig.ipynb`: Jupyter Notebook for signal visualization.
@@ -109,15 +110,15 @@ TrainBenchmark
             └── VisualizationMetrics
 ````
 ### Configurations
-- Configuration files for the main and benchmark models are located in the [Config](https://github.com/JunetaeKim/VABAM/tree/main/Config) and [/Benchmarks
-/Config/](https://github.com/JunetaeKim/VABAM/tree/main/Benchmarks/Config) folders, respectively.
+- Configuration files for the main and benchmark models are located in the [Config](https://github.com/JunetaeKim/VABAM-official/tree/main/Config) and [/Benchmarks
+/Config/](https://github.com/JunetaeKim/VABAM-official/tree/main/Benchmarks/Config) folders, respectively.
 <br><br>
 
 
 ## Demo Guide (Generation + Visualization Only)
 A lightweight demo is available for quick testing of signal generation and visualization.
 - **Demo Sample:** `Data/Demo` — small synthetic dataset generated with NeuroKit2
-- **Demo Notebook:** [DemoVisualizationSig](https://github.com/JunetaeKim/VABAM/blob/main/DemoVisualizationSig.ipynb)
+- **Demo Notebook:** [DemoVisualizationSig](https://github.com/JunetaeKim/VABAM-official/blob/main/DemoVisualizationSig.ipynb)
 
 This notebook covers loading the demo data, running the VABAM generation pipeline, and visualizing generated physiological signals and their spectral characteristics.
 
@@ -158,7 +159,7 @@ For users without access to the original data, synthetic data generated with Neu
 
 
 ## Scripts Executed for Our Research
-All execution code lists are available in the [ExecutionProcedure.txt](https://github.com/JunetaeKim/VABAM/blob/main/ExecutionProcedure.txt) file; please refer to this file for detailed information.
+All execution code lists are available in the [ExecutionProcedure.txt](https://github.com/JunetaeKim/VABAM-official/blob/main/ExecutionProcedure.txt) file; please refer to this file for detailed information.
 
 ### 1.TrainModel.py 
 
