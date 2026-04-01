@@ -8,8 +8,8 @@ This repository contains the official implementation of VABAM along with the Con
 
 - **Development of the VABAM Model:** A model capable of synthesizing pulsatile physiological signals through cascaded filtering effects, namely *amplitude-based* modulation, ensuring the preservation of the signals' waveform shape.
 <p align="center">
-  <img src="https://github.com/JunetaeKim/VABAM-official/blob/main/Figures/Anim.%201%20VABAM%20(Our%20Model)%20Synthesis%20Results.gif" width="49%" alt="Pass-filter mechanism">
-  <img src="https://github.com/JunetaeKim/VABAM-official/blob/main/Figures/Anim.%202%20C-VAE%20Synthesis%20Results.gif" width="49%" alt="Pass-filter mechanism">
+  <img src="https://raw.githubusercontent.com/JunetaeKim/VABAM-official/main/Figures/Anim.%201%20VABAM%20(Our%20Model)%20Synthesis%20Results.gif" width="49%" alt="Pass-filter mechanism">
+  <img src="https://raw.githubusercontent.com/JunetaeKim/VABAM-official/main/Figures/Anim.%202%20C-VAE%20Synthesis%20Results.gif" width="49%" alt="Pass-filter mechanism">
   <br>
   <em>Figure 1: Amplitude-Based Modulation of ABP via VABAM (left) vs CVAE (right) </em>  
 </p>
@@ -23,7 +23,7 @@ Figure 1 shows the results of synthesizing 100 signals from a single original Ar
 <br>
 
 <p align="center">
-  <img src="https://github.com/JunetaeKim/VABAM-official/blob/main/Figures/Schematic%20overview%20for%20assessing%20morphology%E2%80%93amplitude%20decoupling%20quality.png" width="75%" alt="Pass-filter mechanism">
+  <img src="https://raw.githubusercontent.com/JunetaeKim/VABAM-official/main/Figures/Schematic%20overview%20for%20assessing%20morphology%E2%80%93amplitude%20decoupling%20quality.png" width="75%" alt="Pass-filter mechanism">
   <br>
   <em>Figure 2: Evaluation pipeline for waveform shape–amplitude decoupling </em>  
 </p>
@@ -48,8 +48,7 @@ Using these representations, three KLD-based metrics—shape factorization (SF),
 - **Signal Reconstructor** $g_y(\cdot)$ reconstructs coherent signals from the feature subsets, keeping the original signal's main aspects and adding latent elements influenced by $z_{j}$ and $\theta_{k}$.
 
 <p align="center">
-  <img src="https://github.com/JunetaeKim/VABAM-official
-/blob/main/Figures/Overview of the framework and key concepts.png" width="75%" alt="Intuitive Illustration of VABAM">
+  <img src="https://raw.githubusercontent.com/JunetaeKim/VABAM-official/main/Figures/Overview%20of%20the%20framework%20and%20key%20concepts.png" width="75%" alt="Intuitive Illustration of VABAM">
   
   <br>
   <em> Figure 3: Overview of the framework and key concepts </em>  
