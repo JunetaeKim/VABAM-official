@@ -141,8 +141,6 @@ The original study used data from:
 The processed MIMIC-III Waveform dataset used in this study is publicly archived on Zenodo:
 - **DOI**: https://doi.org/10.5281/zenodo.19354579
 
-> ⚠️ The dataset is currently under embargo and will be publicly available upon acceptance of the associated paper.
-
 ### Synthetic Dataset
 For users without access to the original data, synthetic data generated with NeuroKit2 are provided as a substitute.
 - [`Data/Demo`](https://github.com/JunetaeKim/VABAM-official/tree/main/Data/Demo) — small sample for the demo above
