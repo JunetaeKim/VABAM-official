@@ -1,6 +1,6 @@
 ## VABAM: Variational Autoencoder for Amplitude-based Biosignal Augmentation within Morphological Shape.
 
-This repository contains the official implementation of VABAM along with the Conditional Mutual Information (CMI)-based evaluation metrics introduced in [our research](https://www.nature.com/articles/s41467-026-72299-7), published in Nature Communications. VABAM enables the generative synthesis of pulsatile physiological signals by decoupling waveform shape from amplitude dynamics. The CMI-based metrics offer a principled, information-theoretic assessment of the model's ability to achieve this decoupling, supporting evaluation of both structural preservation and amplitude controllability.
+This repository contains the official implementation of VABAM along with the Conditional Mutual Information (CMI)-based evaluation metrics introduced in [our research](https://www.nature.com/articles/s41467-026-72299-7), published in **Nature Communications**. VABAM enables the generative synthesis of pulsatile physiological signals by decoupling waveform shape from amplitude dynamics. The CMI-based metrics offer a principled, information-theoretic assessment of the model's ability to achieve this decoupling, supporting evaluation of both structural preservation and amplitude controllability.
 
 
 
