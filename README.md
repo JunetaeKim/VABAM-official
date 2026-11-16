@@ -33,6 +33,10 @@ Synthetic waveforms generated from latent shape codes <i>z</i> and amplitude cod
 Using these representations, three KLD-based metrics—shape factorization (SF), shape distortion/preservation (SD/SP), and amplitude controllability (AC)—quantify how effectively the model separates and controls waveform shape and amplitude.
 <br><br>
 
+### Extensions
+- **[VABAM-Circadian](https://github.com/JunetaeKim/VABAM-Circadian):** VABAM applied without modification to ~24-h circadian bioluminescence rhythms of cancer cell lines (10-min sampling). Rescaling the filter cut-off range lets θ modulate circadian amplitude while phase and period are preserved. See [Extensions](./Extensions/README.md) for spin-off projects.
+<br><br>
+
  ## A Brief Introduction to VABAM
 -VABAM is structured around five key components: Feature Extractor, Encoder, Sampler, Feature Generator, and Signal Reconstructor (Figure 3). For detailed information, please refer to our paper.
 
