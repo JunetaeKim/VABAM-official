@@ -15,7 +15,7 @@ def ModelCall (SelConfigSet, SigDim, DataSize, Resume=False, LoadWeight=False, R
     KernelSize = (SigDim - CompSize)//Depth + 1    
     CompSize = SigDim - Depth*(KernelSize-1)
 
-    assert CompSize in [i for i in range(100, 1000, 100)], "Value should be one of " +str([i for i in range(100, 1000, 100)])
+    assert CompSize in [i for i in range(50, 1000, 50)], "Value should be one of " +str([i for i in range(50, 1000, 50)])
     MaskingRate = SelConfigSet['MaskingRate']
     NoiseStd = SelConfigSet['NoiseStd']
     MaskStd = SelConfigSet['MaskStd']
