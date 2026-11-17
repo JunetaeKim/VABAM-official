@@ -252,6 +252,12 @@ python TabulatingBMResults.py -CP [config_path] --GPUID [gpu_id]
 <br><br>
 
 
+## Version History
+- **v1.0.1**: `CompSize` accepts multiples of 50 (previously 100); published results are unaffected.
+- **v1.0.0**: Initial release.
+<br><br>
+
+
 ## License
 This project is licensed under the MIT License.  
 See the [LICENSE](./LICENSE) file for details.
